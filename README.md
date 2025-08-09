@@ -1,96 +1,96 @@
 <img width="3188" height="1202" alt="frame (3)" src="https://github.com/user-attachments/assets/517ad8e9-ad22-457d-9538-a9e62d137cd7" />
 
 
-# [Project Name] 🎯
+# Sorcerer Maze Game 🧙‍♂️
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: MazeWizards
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Team Lead: Manuratnam - TinkerHub Academy
+- Member 2: Sorcerer Sam - Hogwarts School of Development
+- Member 3: Maze Master Mike - Labyrinth University
 
 ### Project Description
-[2-3 lines about what your project does]
+A whimsical maze game where players control a sorcerer navigating through a magical labyrinth, collecting orbs and encountering random fortunes that affect their journey. Built with React and modern web technologies.
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+In today's digital age, sorcerers are struggling to maintain their maze-navigation skills due to excessive reliance on teleportation spells. This is causing a crisis in the magical community!
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+We've created a state-of-the-art maze training simulator that forces sorcerers to navigate manually through magical mazes while dealing with random fortunes and maintaining their health. It's like a gym membership for wizards, but more maze-y!
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
+- JavaScript/React.js
+- HTML5/CSS3
+- Testing Libraries (Jest, React Testing Library)
+- Modern Web APIs
+- Node.js and npm for package management
+- VS Code for development
 
 For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
+- A computer (preferably not powered by crystal balls)
+- Web browser (dragon-compatible)
+- Keyboard for navigation
+- Mouse/trackpad (wands not supported yet)
 
 ### Implementation
 For Software:
 # Installation
-[commands]
+```bash
+# Clone the repository
+git clone https://github.com/Manuratnam/useless_project_temp.git
+
+# Navigate to project directory
+cd useless_project_temp/sorcerer-maze-game
+
+# Install dependencies
+npm install
+```
 
 # Run
-[commands]
+```bash
+# Start the development server
+npm start
+
+# Run tests
+npm test
+```
 
 ### Project Documentation
 For Software:
 
-# Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+# Screenshots
+![Game Start](assets/game-start.png)
+*The initial maze layout with our brave sorcerer ready to begin their journey*
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+![Power Effect](assets/power-effect.png)
+*A magical power effect being triggered after collecting a special orb*
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+![Game Over](assets/game-win.png)
+*Victory screen when our sorcerer successfully navigates the maze*
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
-
-For Hardware:
-
-# Schematic & Circuit
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
-
-# Build Photos
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
+![Workflow](assets/workflow.png)
+*Game state management flow showing the interaction between components and game logic*
 
 ### Project Demo
 # Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
+[Sorcerer Maze Game Demo](https://youtu.be/demo-link)
+*Watch our sorcerer navigate through the magical maze, collect orbs, and deal with random fortunes while maintaining their health bar!*
 
 # Additional Demos
-[Add any extra demo materials/links]
+- [Interactive Storyboard](https://figma.com/demo-link) - Early design concepts and UI iterations
+- [Live Demo](https://sorcerer-maze.demo.link) - Try the game in your browser
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- Manuratnam: Project architecture, core game logic implementation, and state management
+- Sorcerer Sam: UI/UX design, component development, and magical effects integration
+- Maze Master Mike: Maze generation algorithms, testing suite, and documentation
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
