@@ -10,8 +10,8 @@
 
 ### Team Members
 - Team Lead: Manuratnam - TinkerHub Academy
-- Member 2: Sorcerer Sam - Hogwarts School of Development
-- Member 3: Maze Master Mike - Labyrinth University
+- Member 2: lifa-tinkerhub academy
+
 
 ### Project Description
 A whimsical maze game where players control a sorcerer navigating through a magical labyrinth, collecting orbs and encountering random fortunes that affect their journey. Built with React and modern web technologies.
