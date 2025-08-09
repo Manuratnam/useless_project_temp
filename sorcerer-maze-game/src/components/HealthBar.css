@@ -1,0 +1,37 @@
+.health-bar {
+  height: 24px;
+  width: 220px;
+  background: #ddd;
+  border-radius: 12px;
+  margin: 0 auto 10px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #aaa;
+}
+
+.health-bar-fill {
+  height: 100%;
+  background: #6a5acd;
+  transition: width 0.3s, background 0.3s;
+}
+
+.health-bar-fill.bad,
+.health-bar-fill.trap {
+  background: #ff4d4d;
+}
+
+.health-bar-fill.good {
+  background: #4dff88;
+}
+
+.health-bar-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  text-align: center;
+  line-height: 24px;
+  color: #222;
+  font-weight: bold;
+}

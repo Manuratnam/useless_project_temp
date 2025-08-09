@@ -1,0 +1,73 @@
+.power-effect {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 10px;
+  animation: fadeInOut 2s ease-in-out;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  min-width: 200px;
+}
+
+.power-effect.good {
+  background: rgba(0, 255, 0, 0.2);
+  border: 2px solid #4dff88;
+  color: #4dff88;
+}
+
+.power-effect.bad {
+  background: rgba(255, 0, 0, 0.2);
+  border: 2px solid #ff4d4d;
+  color: #ff4d4d;
+}
+
+.power-effect.trap {
+  background: rgba(255, 165, 0, 0.2);
+  border: 2px solid #ffa500;
+  color: #ffa500;
+}
+
+.power-effect.scroll {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+}
+
+.power-effect-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.power-effect-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.power-effect-message {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

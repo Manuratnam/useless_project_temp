@@ -1,0 +1,31 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background: #1a1a2e;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.App-header {
+  width: 100%;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  color: #e6e6ff;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.current-score {
+  font-size: 1.5em;
+  margin-top: 10px;
+  color: #4ecca3;
+  text-shadow: 0 0 5px rgba(78, 204, 163, 0.5);
+}

@@ -1,0 +1,285 @@
+import React, { useState, useEffect, useRef } from 'react';
+import HealthBar from './HealthBar';
+import { CELL_TYPES, MAZE_LEVELS, FORTUNES, SCROLL_MESSAGES, POWER_EFFECTS } from '../game/constants';
+import './GameBoard.css';
+
+const getInitialState = (level) => ({
+  maze: MAZE_LEVELS[level],
+  sorcerer: { x: 1, y: 1 },
+  health: 100,
+  orbsLeft: MAZE_LEVELS[level].flat().filter(cell => cell === CELL_TYPES.ORB).length,
+  fortune: "",
+  effect: null,
+  score: 0,
+  gameOver: false,
+  win: false,
+  powerUpActive: false,
+  portalCooldown: false
+});
+
+export default function GameBoard({ level = 0, onGameOver, onScoreUpdate }) {
+  const [state, setState] = useState(getInitialState(level));
+  
+  const effectTimeout = useRef(null);
+  const powerUpTimeout = useRef(null);
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (state.gameOver || state.win) return;
+      
+      let { x, y } = state.sorcerer;
+      let nx = x, ny = y;
+      
+      switch(e.key) {
+        case "ArrowUp": ny--; break;
+        case "ArrowDown": ny++; break;
+        case "ArrowLeft": nx--; break;
+        case "ArrowRight": nx++; break;
+        default: return;
+      }
+      
+      if (state.maze[ny]?.[nx] && state.maze[ny][nx] !== CELL_TYPES.WALL) {
+        interact(nx, ny);
+      }
+    }
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [state, interact]);
+
+  function interact(nx, ny) {
+    if (state.gameOver || state.win) return;
+
+    const cell = state.maze[ny][nx];
+    const maze = state.maze.map(row => [...row]);
+    let { health, score, orbsLeft } = state;
+    let effect = null;
+    let fortune = "";
+    let powerUpActive = state.powerUpActive;
+
+    switch(cell) {
+      case CELL_TYPES.ORB:
+        orbsLeft--;
+        score += 100;
+        effect = { type: 'good', message: 'Memory Shard collected!' };
+        maze[ny][nx] = CELL_TYPES.PATH;
+        break;
+
+      case CELL_TYPES.RED_COOKIE:
+        health -= POWER_EFFECTS.BAD.damage;
+        effect = { type: 'bad', message: POWER_EFFECTS.BAD.description };
+        maze[ny][nx] = CELL_TYPES.PATH;
+        break;
+
+      case CELL_TYPES.GREEN_COOKIE:
+        const healAmount = health < 50 ? POWER_EFFECTS.GOOD.heal * 1.5 : POWER_EFFECTS.GOOD.heal;
+        health = Math.min(100, health + healAmount);
+        powerUpActive = true;
+        effect = { type: 'good', message: POWER_EFFECTS.GOOD.description };
+        maze[ny][nx] = CELL_TYPES.PATH;
+        break;
+
+      case CELL_TYPES.PINK_COOKIE:
+        fortune = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
+        score += 50;
+        maze[ny][nx] = CELL_TYPES.PATH;
+        break;
+
+      case CELL_TYPES.TRAP:
+        health -= POWER_EFFECTS.TRAP.damage;
+        effect = { type: 'trap', message: POWER_EFFECTS.TRAP.description };
+        break;
+
+      case CELL_TYPES.SCROLL:
+        const scrollMessage = SCROLL_MESSAGES[Math.floor(Math.random() * SCROLL_MESSAGES.length)];
+        effect = { type: 'scroll', message: scrollMessage };
+        score += 75;
+        maze[ny][nx] = CELL_TYPES.PATH;
+        break;
+
+      case CELL_TYPES.PORTAL:
+        if (!state.portalCooldown) {
+          const portals = [];
+          maze.forEach((row, y) => {
+            row.forEach((cell, x) => {
+              if (cell === CELL_TYPES.PORTAL && (x !== nx || y !== ny)) {
+                portals.push({ x, y });
+              }
+            });
+          });
+          if (portals.length > 0) {
+            const destination = portals[Math.floor(Math.random() * portals.length)];
+            nx = destination.x;
+            ny = destination.y;
+            effect = { type: 'good', message: 'Teleported!' };
+            setState(prev => ({ ...prev, portalCooldown: true }));
+            setTimeout(() => setState(prev => ({ ...prev, portalCooldown: false })), 3000);
+          }
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    // Check win/lose conditions
+    if (orbsLeft === 0) {
+      effect = { type: 'good', message: 'Level Complete!' };
+      setTimeout(() => onGameOver(score), 2000);
+    }
+    if (health <= 0) {
+      health = 0;
+      effect = { type: 'bad', message: 'Game Over!' };
+      setTimeout(() => onGameOver(score), 2000);
+    }
+
+    // Update score
+    onScoreUpdate(score);
+
+    setState({
+      ...state,
+      maze,
+      sorcerer: { x: nx, y: ny },
+      health,
+      orbsLeft,
+      score,
+      fortune,
+      effect,
+      powerUpActive,
+      gameOver: health <= 0,
+      win: orbsLeft === 0
+    });
+
+    if (effect) {
+      clearTimeout(effectTimeout.current);
+      effectTimeout.current = setTimeout(() => {
+        setState(s => ({
+          ...s,
+          effect: null,
+          fortune: s.fortune
+        }));
+      }, 2000);
+    }
+
+    if (powerUpActive && !state.powerUpActive) {
+      if (powerUpTimeout.current) {
+        clearTimeout(powerUpTimeout.current);
+      }
+      powerUpTimeout.current = setTimeout(() => {
+        setState(prev => ({ ...prev, powerUpActive: false }));
+      }, POWER_EFFECTS.GOOD.duration);
+    }
+  }
+
+  return (
+    <div className="game-container">
+      <div className="game-stats">
+        <HealthBar health={state.health} effect={state.effect?.type} />
+        <div className="stats-right">
+          <div className="orbs-counter">
+            <span className="orb-icon">🔮</span>
+            Orbs: {state.orbsLeft}
+          </div>
+          <div className="score-counter">
+            <span className="score-icon">✨</span>
+            Score: {state.score}
+          </div>
+        </div>
+      </div>
+
+      <div className={`game-board ${state.powerUpActive ? 'power-up-active' : ''}`}>
+        {state.maze.map((row, y) => (
+          <div key={y} className="board-row">
+            {row.map((cell, x) => (
+              <Cell
+                key={x}
+                type={cell}
+                isSorcerer={state.sorcerer.x === x && state.sorcerer.y === y}
+                isPoweredUp={state.powerUpActive}
+                isPortalActive={cell === CELL_TYPES.PORTAL && !state.portalCooldown}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {state.effect && (
+        <div className={`effect-message ${state.effect.type}`}>
+          {state.effect.message}
+        </div>
+      )}
+
+      {state.fortune && (
+        <div className="fortune-message animate">
+          <span className="fortune-icon">📜</span>
+          {state.fortune}
+        </div>
+      )}
+
+      {(state.gameOver || state.win) && (
+        <div className={`game-end ${state.win ? 'win' : 'over'}`}>
+          <h3>{state.win ? "You Win! All memories restored!" : "Game Over!"}</h3>
+          <button onClick={() => setState(getInitialState(level))}>
+            {state.win ? "Play Again" : "Restart"}
+          </button>
+        </div>
+      )}
+
+      <div className="game-instructions">
+        Use arrow keys to move the sorcerer
+      </div>
+    </div>
+  );
+}
+
+function Cell({ type, isSorcerer, isPoweredUp, isPortalActive }) {
+  let content = null;
+  let className = "cell";
+
+  if (isSorcerer) {
+    content = isPoweredUp ? "🧙‍♂️✨" : "🧙‍♂️";
+    className += " sorcerer" + (isPoweredUp ? " powered-up" : "");
+  } else {
+    switch(type) {
+      case CELL_TYPES.WALL:
+        className += " wall";
+        break;
+      case CELL_TYPES.ORB:
+        content = "🔮";
+        className += " orb";
+        break;
+      case CELL_TYPES.RED_COOKIE:
+        content = "🍪";
+        className += " red-cookie";
+        break;
+      case CELL_TYPES.GREEN_COOKIE:
+        content = "🍪";
+        className += " green-cookie";
+        break;
+      case CELL_TYPES.PINK_COOKIE:
+        content = "🍪";
+        className += " pink-cookie";
+        break;
+      case CELL_TYPES.TRAP:
+        content = "⚡";
+        className += " trap";
+        break;
+      case CELL_TYPES.PORTAL:
+        content = "🌀";
+        className += " portal" + (isPortalActive ? " active" : " cooldown");
+        break;
+      case CELL_TYPES.SCROLL:
+        content = "📜";
+        className += " scroll";
+        break;
+      default:
+        break;
+    }
+  }
+
+  return (
+    <div className={className}>
+      <div className="cell-content">{content}</div>
+    </div>
+  );
+}
